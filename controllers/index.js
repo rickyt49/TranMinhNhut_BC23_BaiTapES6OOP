@@ -28,6 +28,8 @@ var arrMonAn = [
 
 renderMenuTable(arrMonAn, ".baiTap2 .card-body .row");
 
+let bill = new Bill();
+
 function renderMenuTable(foodArr, selector) {
   let htmlContent = "";
   for (let key in foodArr) {
@@ -36,14 +38,40 @@ function renderMenuTable(foodArr, selector) {
       <div class="col-3">${foodArr[key].tenMonAn}</div>
       <div class="col-3">${foodArr[key].giaTien}</div>
       <div class="col-3">
-        <button class="bg-danger text-white btn">+</button>
-        <button class="bg-danger text-white btn">-</button>
+        <button class="bg-danger text-white btn" onclick="addToBill(${foodArr[key].maMonAn})">+</button>
+        <button class="bg-danger text-white btn "onclick="subtractFromBill(${foodArr[key].maMonAn})">-</button>
       </div>
  `;
   }
   document.querySelector(selector).innerHTML += htmlContent;
 }
+function renderBillTable(arrBill, selector) {
+  let billHTMLContent = "";
+  for (let key in arrBill) {
+    billHTMLContent += `
+    <tr>
+      <td>${arrBill[key].maMonAn}</td>
+      <td>${arrBill[key].tenMonAn}</td>
+      <td>${arrBill[key].soLuong}</td>
+      <td>${arrBill[key].giaMotMon}</td>
+    </tr>       
+    `;
+  }
+  document.querySelector(selector).innerHTML = billHTMLContent;
+}
 
-let bill = new Bill();
+window.addToBill = (monDaChon) => {
+  bill.themMonVaoBill(monDaChon, arrMonAn);
+  renderBillTable(bill.danhSachMonDaChon, "#tblHoaDon");
+  console.log(bill.danhSachMonDaChon);
+
+  document.querySelector("#txtTongTien").innerHTML = bill.tongGia;
+};
+window.subtractFromBill = (monDaChon) => {
+  bill.xoaMonKhoiBill(monDaChon);
+  console.log(bill.danhSachMonDaChon);
+  renderBillTable(bill.danhSachMonDaChon, "#tblHoaDon");
+  document.querySelector("#txtTongTien").innerHTML = bill.tongGia;
+};
 document.querySelectorAll(".baiTap2 .card-body .row button").onclick =
   function () {};
